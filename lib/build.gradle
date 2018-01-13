@@ -6,3 +6,23 @@ dependencies {
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+def webUrl = 'https://github.com/llew2011/Reflection'
+def gitUrl = 'https://github.com/llew2011/Reflection.git'
+def orgName = 'llew'
+def verName = '1.0.0'
+def libName = 'reflect'
+def grpName = 'com.llew'
+def libDesc = 'A simplified Java reflection library. This library generated from DroidPlugin'
+
+
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    userOrg         = orgName
+    groupId         = grpName
+    artifactId      = libName
+    publishVersion  = verName
+    desc            = libDesc
+    website         = webUrl
+}
