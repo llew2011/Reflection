@@ -73,4 +73,10 @@ class ReflectUtils {
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
+
+    public static void print(Throwable throwable) {
+        if (null != throwable) {
+            throwable.printStackTrace();
+        }
+    }
 }

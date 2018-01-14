@@ -5,6 +5,8 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.llew.reflect.ReflectUtils.print;
+
 public class FieldUtils {
 
     private static Map<String, Field> sFieldCache = new HashMap<String, Field>();
@@ -99,10 +101,18 @@ public class FieldUtils {
         return readField(field, target, true);
     }
 
+    public static Field getField(final String cls, final String fieldName) {
+        try {
+            return getField(Class.forName(cls), fieldName, true);
+        } catch (Throwable ignore) {
+            print(ignore);
+        }
+        return null;
+    }
+
     public static Field getField(final Class<?> cls, final String fieldName) {
         return getField(cls, fieldName, true);
     }
-
 
     public static Object readField(final Object target, final String fieldName) throws IllegalAccessException {
         Validate.isTrue(target != null, "target object must not be null");
@@ -146,6 +156,15 @@ public class FieldUtils {
         return readField(field, (Object) null, forceAccess);
     }
 
+    public static Object readStaticField(final String cls, final String fieldName) throws IllegalAccessException {
+        try {
+            return readStaticField(Class.forName(cls), fieldName);
+        } catch (Throwable ignored) {
+            print(ignored);
+        }
+        return null;
+    }
+
     public static Object readStaticField(final Class<?> cls, final String fieldName) throws IllegalAccessException {
         final Field field = getField(cls, fieldName, true);
         Validate.isTrue(field != null, "Cannot locate field '%s' on %s", fieldName, cls);
@@ -160,12 +179,28 @@ public class FieldUtils {
         writeField(field, (Object) null, value, forceAccess);
     }
 
+    public static void writeStaticField(final String cls, final String fieldName, final Object value) throws IllegalAccessException {
+        try {
+            writeStaticField(Class.forName(cls), fieldName, value);
+        } catch (Throwable ignore) {
+            ReflectUtils.print(ignore);
+        }
+    }
 
     public static void writeStaticField(final Class<?> cls, final String fieldName, final Object value) throws IllegalAccessException {
         final Field field = getField(cls, fieldName, true);
         Validate.isTrue(field != null, "Cannot locate field %s on %s", fieldName, cls);
         // already forced access above, don't repeat it here:
         writeStaticField(field, value, true);
+    }
+
+    public static Field getDeclaredField(final String cls, final String fieldName, final boolean forceAccess) {
+        try {
+            return getDeclaredField(Class.forName(cls), fieldName, forceAccess);
+        } catch (Throwable ignore) {
+            print(ignore);
+        }
+        return null;
     }
 
     public static Field getDeclaredField(final Class<?> cls, final String fieldName, final boolean forceAccess) {

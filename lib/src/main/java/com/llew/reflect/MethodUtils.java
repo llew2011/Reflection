@@ -8,6 +8,8 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.llew.reflect.ReflectUtils.print;
+
 
 public class MethodUtils {
 
@@ -101,6 +103,16 @@ public class MethodUtils {
         return method;
     }
 
+    public static Method getAccessibleMethod(final String cls, final String methodName,
+                                             final Class<?>... parameterTypes) throws NoSuchMethodException {
+        try {
+            return getAccessibleMethod(Class.forName(cls), methodName, parameterTypes);
+        } catch (Throwable ignore) {
+            print(ignore);
+        }
+        return null;
+    }
+
     public static Method getAccessibleMethod(final Class<?> cls, final String methodName,
                                              final Class<?>... parameterTypes) throws NoSuchMethodException {
         String key = getKey(cls, methodName, parameterTypes);
@@ -189,6 +201,17 @@ public class MethodUtils {
         return method.invoke(object, args);
     }
 
+    public static Object invokeStaticMethod(final String clazz, final String methodName,
+                                            Object[] args, Class<?>[] parameterTypes)
+            throws NoSuchMethodException, IllegalAccessException,
+            InvocationTargetException {
+        try {
+            return invokeStaticMethod(Class.forName(clazz), methodName, args, parameterTypes);
+        } catch (Throwable ignore) {
+        }
+        return null;
+    }
+
     public static Object invokeStaticMethod(final Class clazz, final String methodName,
                                             Object[] args, Class<?>[] parameterTypes)
             throws NoSuchMethodException, IllegalAccessException,
@@ -203,6 +226,17 @@ public class MethodUtils {
                     + clazz.getName());
         }
         return method.invoke(null, args);
+    }
+
+    public static Object invokeStaticMethod(final String clazz, final String methodName,
+                                            Object... args) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException {
+        try {
+            return invokeStaticMethod(Class.forName(clazz), methodName, args);
+        } catch (Throwable ignore) {
+            print(ignore);
+        }
+        return null;
     }
 
     public static Object invokeStaticMethod(final Class clazz, final String methodName,
